@@ -15,6 +15,7 @@
             this.toppings = toppings;
         }
         public abstract double CalculatePrice();
+        
         public override string ToString()
         {
             return $"Option: {option} Scoops: {scoops} Flavours: {flavours} Toppings: {toppings}";

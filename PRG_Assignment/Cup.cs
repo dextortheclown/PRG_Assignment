@@ -1,12 +1,10 @@
 ﻿namespace PRG_Assignment
 {
-    internal class Waffle : IceCream
+    internal class Cup : IceCream
     {
-        public string waffleFlavour { get; set; }
-        public Waffle():base() { }
-        public Waffle(string option, int scoops, List<Flavour> flavours, List<Topping> toppings, string waffleFlavour) : base(option, scoops, flavours, toppings) 
+        public Cup():base() { }
+        public Cup(string option, int scoops, List<Flavour> flavours, List<Topping> toppings) :base(option, scoops, flavours, toppings)
         {
-            this.waffleFlavour = waffleFlavour;
         }
         public override double CalculatePrice()
         {
@@ -15,13 +13,13 @@
             switch (scoops)
             {
                 case 1:
-                    price = 7.00;
+                    price = 4.00;
                     break;
                 case 2:
-                    price = 8.5;
+                    price = 5.5;
                     break;
                 case 3:
-                    price = 9.5;
+                    price = 6.5;
                     break;
                 default:
                     throw new ArgumentException("Please choose 1,2 or 3 scoops");
@@ -39,12 +37,11 @@
             {
                 price += toppings.Count;
             }
-            // check for premium waffle flavour
-            if (waffleFlavour == "Red velvet" || waffleFlavour == "Charcoal" || waffleFlavour == "Pandan")
-            {
-                price += 3.00; // $3 extra for special waffle flavours
-            }
             return price;
+        }
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }
