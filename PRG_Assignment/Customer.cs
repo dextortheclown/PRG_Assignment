@@ -16,9 +16,27 @@
             this.dob = dob;
             orderHistory = new List<Order>();
         }
-        public Order MakeOrder()
+        public Order MakeOrder(Order item)
         {
-
+            orderHistory.Add(item);
+            dtOrder = dob.Push(DateTime.Now); 
+        }
+        public bool isBirthday()
+        {
+            if (dob.Day == DateTime.Today.Day && dob.Month == DateTime.Today.Month) 
+            {
+                return true;
+            }
+            else { return false; }
+        }
+        public override string ToString()
+        {
+            string OrderHist = "";
+            foreach (Order o in orderHistory)
+            {
+                OrderHist += o.ToString();
+            }
+            return $"Name: {name} | Member ID: {memberid} | Date of Birth: {dob} | Order History: {OrderHist}";
         }
     }
 }

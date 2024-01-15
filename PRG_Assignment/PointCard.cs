@@ -19,12 +19,17 @@
         {
             points -= amt;
         }
-        public void Punch()
+        public void Punch(IceCream iceCream)
         {
-            if (punchCard < 11)
+            if (punchCard % 11 == 0)
             {
-
+                iceCream[10].cost = 0;
+                punchCard = 0;
             }
+        }
+        public override string ToString()
+        {
+            return$"Points: {points} | Punch Card: {punchCard} | Tier: {tier}";
         }
     }
 }
