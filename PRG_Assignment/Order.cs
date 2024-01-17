@@ -20,23 +20,24 @@
         {
             iceCreamList.Add(iceCream);
         }
-        public void DeleteIceCream(int id)
+        public void DeleteIceCream(int id, IceCream iceCream)
         {
-            iceCreamList.Remove(id);
+            iceCreamList.Remove(iceCream);
         }
         public double CalculateTotal()
         {
             // Dexter edit here according to qn 6
+            return 0;
         }
         public override string ToString()
         {
             string iceCreamListString = "";
-            foreach (IceCream iceCream in IceCreamList)
+            foreach (IceCream iceCream in iceCreamList)
             {
                 iceCreamListString += iceCream.ToString() + "\n";
             }
 
-            return $"Order ID: {Id}" + $"Time Received: {TimeReceived:d}" + (TimeFulfilled.HasValue ? "\n" + $"Time Fulfilled: {TimeFulfilled:d}" : "") + $"Items:" + iceCreamListString;
+            return $"Order ID: {id}" + $"Time Received: {timeReceived:d}" + (timeFulfilled.HasValue ? "\n" + $"Time Fulfilled: {timeFulfilled:d}" : "") + $"Items:" + iceCreamListString;
         }
 
     }

@@ -1,9 +1,9 @@
 ﻿namespace PRG_Assignment
 {
-    internal class Customer
+    internal class Customer : Order
     {
-        public string name {  get; set; }
-        public int memberid {  get; set; }
+        public string name { get; set; }
+        public int memberid { get; set; }
         public DateTime dob { get; set; }
         public Order currentOrder { get; set; }
         public List<Order> orderHistory { get; set; }
@@ -19,11 +19,11 @@
         public Order MakeOrder(Order item)
         {
             orderHistory.Add(item);
-            dtOrder = dob.Push(DateTime.Now); 
+            dtOrder = dob.Push(DateTime.Now);
         }
         public bool isBirthday()
         {
-            if (dob.Day == DateTime.Today.Day && dob.Month == DateTime.Today.Month) 
+            if (dob.Day == DateTime.Today.Day && dob.Month == DateTime.Today.Month)
             {
                 return true;
             }
