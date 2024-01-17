@@ -1,12 +1,19 @@
-﻿namespace PRG_Assignment
+﻿using PRG_Assignment;
+
+using System.Xml.Linq;
+
+namespace ProgrammingAssgntest
 {
     internal class Order
     {
-        public int id {  get; set; }
+        public int id { get; set; }
         public DateTime timeReceived { get; set; }
         public DateTime? timeFulfilled { get; set; }
         public List<IceCream> iceCreamList { get; set; }
-        public Order() { }
+        public Order()
+        {
+            iceCreamList = new List<IceCream>();
+        }
         public Order(int id, DateTime timeReceived)
         {
             this.id = id;
@@ -26,8 +33,12 @@
         }
         public double CalculateTotal()
         {
-            // Dexter edit here according to qn 6
-            return 0;
+            double total = 0;
+            foreach (IceCream iceCream in iceCreamList)
+            {
+                total += iceCream.CalculatePrice(); // Assuming IceCream class has a CalculatePrice method
+            }
+            return total;
         }
         public override string ToString()
         {

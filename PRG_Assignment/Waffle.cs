@@ -1,10 +1,15 @@
-﻿namespace PRG_Assignment
+﻿
+using PRG_Assignment;
+
+using static System.Formats.Asn1.AsnWriter;
+
+namespace ProgrammingAssgntest
 {
     internal class Waffle : IceCream
     {
         public string waffleFlavour { get; set; }
-        public Waffle():base() { }
-        public Waffle(string option, int scoops, List<Flavour> flavours, List<Topping> toppings, string waffleFlavour) : base(option, scoops, flavours, toppings) 
+        public Waffle() : base() { }
+        public Waffle(string option, int scoops, List<Flavour> flavours, List<Topping> toppings, string waffleFlavour) : base(option, scoops, flavours, toppings)
         {
             this.waffleFlavour = waffleFlavour;
         }
