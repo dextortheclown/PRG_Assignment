@@ -1,42 +1,54 @@
-﻿namespace PRG_Assignment
+﻿using PRG_Assignment;
+
+using System;
+using System.Collections.Generic;
+
+namespace PRG_Assignment
 {
-    internal class Customer : Order
+    internal class Customer
     {
         public string name { get; set; }
-        public int memberid { get; set; }
+        public int memberId { get; set; }
         public DateTime dob { get; set; }
         public Order currentOrder { get; set; }
         public List<Order> orderHistory { get; set; }
         public PointCard rewards { get; set; }
-        public Customer() { }
-        public Customer(string name, int memberid, DateTime dob)
+
+        public Customer()
         {
-            this.name = name;
-            this.memberid = memberid;
-            this.dob = dob;
             orderHistory = new List<Order>();
         }
-        public Order MakeOrder(Order item)
+
+        public Customer(string name, int memberId, DateTime dob) : this()
         {
+            this.name = name;
+            this.memberId = memberId;
+            this.dob = dob;
+        }
+
+        public void MakeOrder(Order item)
+        {
+            // Add the new order to the order history
             orderHistory.Add(item);
-            dtOrder = dob.Push(DateTime.Now);
+            // Set the current order to the new order
+            currentOrder = item;
         }
-        public bool isBirthday()
+
+        public bool IsBirthday()
         {
-            if (dob.Day == DateTime.Today.Day && dob.Month == DateTime.Today.Month)
-            {
-                return true;
-            }
-            else { return false; }
+            // Check if today is the customer's birthday
+            return dob.Day == DateTime.Today.Day && dob.Month == DateTime.Today.Month;
         }
+
         public override string ToString()
         {
-            string OrderHist = "";
-            foreach (Order o in orderHistory)
+            string orderHistoryString = "";
+            foreach (Order order in orderHistory)
             {
-                OrderHist += o.ToString();
+                orderHistoryString += order.ToString() + "\n";
             }
-            return $"Name: {name} | Member ID: {memberid} | Date of Birth: {dob} | Order History: {OrderHist}";
+
+            return $"Name: {name} | Member ID: {memberId} | Date of Birth: {dob.ToShortDateString()} | Order History: {orderHistoryString}";
         }
     }
 }
