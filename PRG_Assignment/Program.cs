@@ -6,7 +6,7 @@
 
 // IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
 
-//Display menu
+// Display menu
 
 using PRG_Assignment;
 
