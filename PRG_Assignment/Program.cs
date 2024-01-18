@@ -1,4 +1,10 @@
-﻿// IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
+﻿//==========================================================
+// Student Number : S10261312
+// Student Name : Dexter Wong Jun Han// Parter Number : S10258309
+// Partner Name : Chua Qi An//
+// ==========================================================
+
+// IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
 
 //Display menu
 
@@ -15,7 +21,7 @@ while (true)
     }
     else if (option == "2")
     {
-
+        Option2();
     }
     else if (option == "3")
     {
@@ -80,7 +86,42 @@ void Option1()
 }
 
 // Basic Feature Question 2 ------------------ List all current orders
-
+bool IsGoldMember(int memberID)
+{
+    using (StreamReader sr = new StreamReader("customers.csv"))
+    {
+        sr.ReadLine(); // Skip the header
+        string? s;
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] info = s.Split(",");
+            if (memberID == int.Parse(info[1]) && info[3] == "Gold")
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+void createDictionary(Dictionary<int, string> dict)
+{
+    using (StreamReader sr = new StreamReader("customers.csv"))
+    {
+        sr.ReadLine(); // Skip the header
+        string? s;
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] info = s.Split(",");
+            int MemId = int.Parse(info[1]);
+            string MemStatus = info[3];
+            dict.Add(MemId, MemStatus);
+        }
+    }
+}
+void Option2()
+{
+    
+}
 
 
 // Basic Feature Question 3 ------------------ Register a new customer
@@ -99,8 +140,6 @@ void Option3()
     AppendCustomerToFile(newCustomer);
     Console.WriteLine("Customer registration successful!");
     Console.WriteLine();
-
-
 }
 
 void AppendCustomerToFile(Customer customer) // To append customer into CSV file for option 3
