@@ -1,8 +1,4 @@
-﻿using PRG_Assignment;
-
-using System.Xml.Linq;
-
-namespace PRG_Assignment
+﻿namespace PRG_Assignment
 {
     internal class Order
     {

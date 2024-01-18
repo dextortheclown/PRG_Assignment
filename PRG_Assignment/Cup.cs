@@ -1,5 +1,4 @@
-﻿using PRG_Assignment;
-namespace PRG_Assignment
+﻿namespace PRG_Assignment
 {
     internal class Cup : IceCream
     {
