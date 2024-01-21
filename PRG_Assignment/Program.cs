@@ -17,7 +17,7 @@ for (int i = 1; i < order.Length; i++)
 }
 
 // Customer Objects
-string[] customer = File.ReadAllLines("customer.csv");
+string[] customer = File.ReadAllLines("customers.csv");
 List<Customer> customerList = new List<Customer>();
 for (int i = 1;i < customer.Length; i++)
 {
@@ -49,7 +49,7 @@ while (true)
     }
     else if (option == "5")
     {
-        option5();
+        Option5();
     }
     else if (option == "6")
     {
@@ -65,6 +65,7 @@ while (true)
     }
     else if (option == "0")
     {
+        Console.WriteLine("Terminating system (╥_╥) ");
         break;
     }
     else
@@ -82,12 +83,12 @@ void DisplayMenu()
 
 void Option1()
 {
-    string[] CustomerCSVFile = File.ReadAllLines("customers.csv");
-    string[] Heading = CustomerCSVFile[0].Split(',');
+    
+    string[] Heading = customer[0].Split(',');
     Console.WriteLine($"{Heading[0],-15}{Heading[1],-15}{Heading[2],-15}{Heading[3],-20}{Heading[4],-20}{Heading[5],-15}");
-    for (int i = 1; i < CustomerCSVFile.Length; i++)
+    for (int i = 1; i < customer.Length; i++)
     {
-        string[] info = CustomerCSVFile[i].Split(",");
+        string[] info = customer[i].Split(",");
         if (info.Length >= 6)
         {
             string Names = info[0];
@@ -166,12 +167,12 @@ void AppendCustomerToFile(Customer customer) // To append customer into CSV file
 // Basic Feature Question 4 ------------------ Create a customer's order
 void Option4()
 {
-    string[] CustomerCSVFile = File.ReadAllLines("customers.csv");
-    string[] Heading = CustomerCSVFile[0].Split(',');
+    //Printing of list of customers
+    string[] Heading = customer[0].Split(',');
     Console.WriteLine($"{Heading[0],-15}{Heading[1],-15}{Heading[2],-15}{Heading[3],-20}{Heading[4],-20}{Heading[5],-15}");
-    for (int i = 1; i < CustomerCSVFile.Length; i++)
+    for (int i = 1; i < customer.Length; i++)
     {
-        string[] info = CustomerCSVFile[i].Split(",");
+        string[] info = customer[i].Split(",");
         if (info.Length >= 6)
         {
             string Names = info[0];
@@ -183,24 +184,83 @@ void Option4()
             Console.WriteLine($"{Names,-15}{MemberID,-15}{DOB,-15}{MemberStatus,-20}{MembershipPoints,-20}{PunchCard,-15}");
         }
     }
+
+    // Load customers from CSV file
+    List<Customer> customers = LoadCustomersFromFile("customers.csv");
+
+
+    // Prompt the user to select a customer by Member ID
     Console.Write("Select a customer by Member ID (E.G 685582): ");
     string memberID = Console.ReadLine();
-    Console.Write("Select an ice cream order option: ");
-    string option = Console.ReadLine();
-    Console.Write("Select the number of scoops: ");
-    int scoops = int.Parse(Console.ReadLine());
+
+    // Search for the customer with the specified Member ID
+    Customer foundCustomer = customers.Find(customer => customer.memberId.ToString() == memberID);
+
+    if (foundCustomer != null)
+    {
+        try
+        {
+            // Customer found, proceed with order
+            Console.WriteLine($"Customer Found: {foundCustomer.name} - {foundCustomer.memberId}");
+            Console.Write("Select an option (Cup, Cone, Waffle): ");
+            string option = Console.ReadLine().ToUpper();
+            Console.Write("Select the number of scoops: ");
+            int scoops = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Select an ice cream order option (Basic Flavours: Vanilla, Chocolate, Strawberry | Premium Flavours(+$2 per scoop): Durian, Ube, Sea salt ): ");
+            string flavours = Console.ReadLine().ToUpper();
+            Console.Write("Select topping(s) (Sprinkles, Mochi, Sago, Oreos): ");
+            string toppings = Console.ReadLine().ToUpper();
+            //Creating order object
+            Order order = new Order();
 
 
+            // Update the customer's current order and order history
+            foundCustomer.currentOrder = order;
+            foundCustomer.orderHistory.Add(order);
 
-    Order order = new Order();
+            // Display confirmation message
+            Console.WriteLine($"Order for {foundCustomer.name} - {foundCustomer.memberId} has been logged : Option: {option} | No. of scoops: {scoops} | Flavour: {flavours} | Topping: {toppings}");
+            Console.WriteLine("Order placed successfully!");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Please enter a valid input.");
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); }
 
+    }
+    else
+    {
+        Console.WriteLine("No customer found with the given Member ID, please enter a valid member ID.");
+    }
+}
 
+static List<Customer> LoadCustomersFromFile(string filePath)
+{
+    List<Customer> customers = new List<Customer>();
+    string[] CustomerCSVFile = File.ReadAllLines(filePath);
 
-
+    for (int i = 1; i < CustomerCSVFile.Length; i++)
+    {
+        string[] info = CustomerCSVFile[i].Split(",");
+        if (info.Length >= 6)
+        {
+            Customer customer = new Customer(
+                name: info[0],
+                memberId: int.Parse(info[1]),
+                dob: DateTime.Parse(info[2])
+            );
+            // Assuming PointCard constructor and relevant methods are defined
+            PointCard rewards = new PointCard(int.Parse(info[4]), int.Parse(info[5]));
+            customer.rewards = rewards;
+            customers.Add(customer);
+        }
+    }
+    return customers;
 }
 
 // Basic Feature Question 5 ------------------ Display order details of a customer
-void option5()
+void Option5()
 {
     // Displaying customers
     string[] customer = File.ReadAllLines("customers.csv");
