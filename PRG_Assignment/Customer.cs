@@ -24,6 +24,7 @@ namespace PRG_Assignment
             this.name = name;
             this.memberId = memberId;
             this.dob = dob;
+            orderHistory = new List<Order>();
         }
 
         public void MakeOrder(Order item)

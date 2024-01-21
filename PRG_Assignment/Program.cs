@@ -5,12 +5,10 @@
 // ==========================================================
 
 // IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
-
-// Display menu
-
 using PRG_Assignment;
 
 
+// Display menu
 while (true)
 {
     DisplayMenu();
@@ -86,41 +84,40 @@ void Option1()
 }
 
 // Basic Feature Question 2 ------------------ List all current orders
-bool IsGoldMember(int memberID)
+void Option2()
 {
-    using (StreamReader sr = new StreamReader("customers.csv"))
+    string[] customer = File.ReadAllLines("customers.csv");
+    string[] order = File.ReadAllLines("orders.csv");
+    // gold queue
+    Console.WriteLine("----Gold Queue----");
+    Console.WriteLine($"{"Name",-10}{"Option",-8}{"Scoops",-8}{"Dipped",-8}{"Waffle Flavour",-15}{"Flavour1",-12}{"Flavour2",-12}{"Flavour3",-12}{"Topping1",-11}{"Topping2",-11}{"Topping3",-11}{"Topping4",-11}");
+    for (int i = 1; i < customer.Length; i++)
     {
-        sr.ReadLine(); // Skip the header
-        string? s;
-        while ((s = sr.ReadLine()) != null)
+        string[] cusinfo = customer[i].Split(",");
+        for (int j = 1; j < order.Length; j++)
         {
-            string[] info = s.Split(",");
-            if (memberID == int.Parse(info[1]) && info[3] == "Gold")
+            string[] ordinfo = order[j].Split(",");
+            if (cusinfo[3] == "Gold" && cusinfo[1] == ordinfo[1])
             {
-                return true;
+                Console.WriteLine($"{cusinfo[0],-10}{ordinfo[4],-8}{ordinfo[5],-8}{ordinfo[6],-8}{ordinfo[7],-15}{ordinfo[8],-12}{ordinfo[9],-12}{ordinfo[10],-12}{ordinfo[11],-11}{ordinfo[12],-11}{ordinfo[13],-11}{ordinfo[14],-11}");
             }
         }
     }
-    return false;
-}
-void createDictionary(Dictionary<int, string> dict)
-{
-    using (StreamReader sr = new StreamReader("customers.csv"))
+    // normal queue
+    Console.WriteLine("----Normal Queue----");
+    Console.WriteLine($"{"Name",-10}{"Option",-8}{"Scoops",-8}{"Dipped",-8}{"Waffle Flavour",-15}{"Flavour1",-12}{"Flavour2",-12}{"Flavour3",-12}{"Topping1",-11}{"Topping2",-11}{"Topping3",-11}{"Topping4",-11}");
+    for (int i = 1;i < customer.Length; i++)
     {
-        sr.ReadLine(); // Skip the header
-        string? s;
-        while ((s = sr.ReadLine()) != null)
+        string[] cusinfo = customer[i].Split(",");
+        for (int j = 1; j < order.Length; j++)
         {
-            string[] info = s.Split(",");
-            int MemId = int.Parse(info[1]);
-            string MemStatus = info[3];
-            dict.Add(MemId, MemStatus);
+            string[] ordinfo = order[j].Split(",");
+            if (cusinfo[3] != "Gold" && cusinfo[1] == ordinfo[1])
+            {
+                Console.WriteLine($"{cusinfo[0],-10}{ordinfo[4],-8}{ordinfo[5],-8}{ordinfo[6],-8}{ordinfo[7],-15}{ordinfo[8],-12}{ordinfo[9],-12}{ordinfo[10],-12}{ordinfo[11],-11}{ordinfo[12],-11}{ordinfo[13],-11}{ordinfo[14],-11}");
+            }
         }
     }
-}
-void Option2()
-{
-    
 }
 
 
