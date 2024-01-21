@@ -6,6 +6,24 @@
 
 // IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
 using PRG_Assignment;
+// initialising all objects
+// Order Objects
+string[] order = File.ReadAllLines("orders.csv");
+List<Order> orderList = new List<Order>();
+for (int i = 1; i < order.Length; i++)
+{
+    string[] ordinfo = order[i].Split(',');
+    orderList.Add(new Order(int.Parse(ordinfo[1]), DateTime.Parse(ordinfo[3])));
+}
+
+// Customer Objects
+string[] customer = File.ReadAllLines("customer.csv");
+List<Customer> customerList = new List<Customer>();
+for (int i = 1;i < customer.Length; i++)
+{
+    string[] cusinfo = customer[i].Split(",");
+    customerList.Add(new Customer(cusinfo[0], int.Parse(cusinfo[1]), DateTime.Parse(cusinfo[2])));
+}
 
 
 // Display menu
@@ -31,7 +49,7 @@ while (true)
     }
     else if (option == "5")
     {
-
+        option5();
     }
     else if (option == "6")
     {
@@ -182,7 +200,12 @@ void Option4()
 }
 
 // Basic Feature Question 5 ------------------ Display order details of a customer
+void option5()
+{
+    // Displaying customers
+    string[] customer = File.ReadAllLines("customers.csv");
 
+}
 
 
 // Basic Feature Question 6 ------------------ Modify order details
