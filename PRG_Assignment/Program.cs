@@ -25,6 +25,22 @@ for (int i = 1;i < customer.Length; i++)
     customerList.Add(new Customer(cusinfo[0], int.Parse(cusinfo[1]), DateTime.Parse(cusinfo[2])));
 }
 
+// Adding Orders to History for each customer
+foreach (Customer customers in customerList)
+{
+    for (int j = 1; j < order.Length; j++)
+    {
+        string[] ordinfo = order[j].Split(",");
+        if (customers.memberId == int.Parse(ordinfo[1]))
+        {
+            customers.MakeOrder(new Order(ordinfo[]));
+        }
+    }
+}
+// Creating Gold Customer Queue 
+Queue<Order> GoldQueue = new Queue<Order>();
+
+
 
 // Display menu
 while (true)
@@ -105,8 +121,6 @@ void Option1()
 // Basic Feature Question 2 ------------------ List all current orders
 void Option2()
 {
-    string[] customer = File.ReadAllLines("customers.csv");
-    string[] order = File.ReadAllLines("orders.csv");
     // gold queue
     Console.WriteLine("----Gold Queue----");
     Console.WriteLine($"{"Name",-10}{"Option",-8}{"Scoops",-8}{"Dipped",-8}{"Waffle Flavour",-15}{"Flavour1",-12}{"Flavour2",-12}{"Flavour3",-12}{"Topping1",-11}{"Topping2",-11}{"Topping3",-11}{"Topping4",-11}");
@@ -263,8 +277,9 @@ static List<Customer> LoadCustomersFromFile(string filePath)
 void Option5()
 {
     // Displaying customers
-    string[] customer = File.ReadAllLines("customers.csv");
-
+    Option1();
+    Console.Write("Choose a Customer: ");
+    string? custoption = Console.ReadLine();
 }
 
 
