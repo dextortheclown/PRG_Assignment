@@ -6,6 +6,7 @@
 
 // IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
 using PRG_Assignment;
+using ProgrammingAssgntest;
 // initialising all objects
 // Order Objects
 string[] order = File.ReadAllLines("orders.csv");
@@ -39,6 +40,7 @@ foreach (Customer customers in customerList)
 }
 // Creating Gold Customer Queue 
 Queue<Order> GoldQueue = new Queue<Order>();
+Queue<Order> NormalQueue = new Queue<Order>();
 
 
 
@@ -181,7 +183,9 @@ void AppendCustomerToFile(Customer customer) // To append customer into CSV file
 // Basic Feature Question 4 ------------------ Create a customer's order
 void Option4()
 {
+
     //Printing of list of customers
+
     string[] Heading = customer[0].Split(',');
     Console.WriteLine($"{Heading[0],-15}{Heading[1],-15}{Heading[2],-15}{Heading[3],-20}{Heading[4],-20}{Heading[5],-15}");
     for (int i = 1; i < customer.Length; i++)
@@ -209,38 +213,285 @@ void Option4()
 
     // Search for the customer with the specified Member ID
     Customer foundCustomer = customers.Find(customer => customer.memberId.ToString() == memberID);
-
     if (foundCustomer != null)
     {
-        try
+        bool addMoreIceCream = true;
+        while (addMoreIceCream)
         {
-            // Customer found, proceed with order
-            Console.WriteLine($"Customer Found: {foundCustomer.name} - {foundCustomer.memberId}");
-            Console.Write("Select an option (Cup, Cone, Waffle): ");
-            string option = Console.ReadLine().ToUpper();
-            Console.Write("Select the number of scoops: ");
-            int scoops = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Select an ice cream order option (Basic Flavours: Vanilla, Chocolate, Strawberry | Premium Flavours(+$2 per scoop): Durian, Ube, Sea salt ): ");
-            string flavours = Console.ReadLine().ToUpper();
-            Console.Write("Select topping(s) (Sprinkles, Mochi, Sago, Oreos): ");
-            string toppings = Console.ReadLine().ToUpper();
-            //Creating order object
-            Order order = new Order();
+            try
+            {
+                bool premium;
+                Order newOrder = new Order();
 
 
-            // Update the customer's current order and order history
-            foundCustomer.currentOrder = order;
-            foundCustomer.orderHistory.Add(order);
 
-            // Display confirmation message
-            Console.WriteLine($"Order for {foundCustomer.name} - {foundCustomer.memberId} has been logged : Option: {option} | No. of scoops: {scoops} | Flavour: {flavours} | Topping: {toppings}");
-            Console.WriteLine("Order placed successfully!");
+                // Flavour list
+                List<Flavour> flavours = new List<Flavour>();
+                // Toppings list
+                List<Topping> toppings = new List<Topping>();
+                // Waffle list
+                List<Waffle> waffles = new List<Waffle>();
+                // Customer found, proceed with order
+
+                Console.WriteLine($"Customer Found: {foundCustomer.name} - {foundCustomer.memberId}");
+
+                bool OptionsLoop = true;
+                string option = "";
+                while (OptionsLoop)
+                {
+                    Console.Write("Select an option (Cup, Cone, Waffle): ");
+                    option = Console.ReadLine().ToLower().Trim();
+                    if (option != "cup" && option != "cone" && option != "waffle")
+                    {
+                        Console.WriteLine("Please enter a valid option!");
+                        OptionsLoop = true;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+
+                }
+                bool optionloop = true;
+                // Loop to ensure 3 scoops or below
+                int scoops = 0;
+                while (optionloop)
+                {
+
+                    Console.Write("Please enter the number of scoops (1-3) : ");
+                    scoops = Convert.ToInt32(Console.ReadLine());
+                    if (scoops > 3)
+                    {
+                        Console.WriteLine("Please enter numbers between 1 to 3");
+                        optionloop = true;
+                    }
+                    else if (scoops > 0 && scoops <= 3)
+                    {
+                        optionloop = false; // Break out of the loop for valid input
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a valid input");
+                        optionloop = true;
+                    }
+                }
+                string type = "";
+                while (scoops > 0)
+                {
+                    // flavour loop
+                    bool flavourloop = true;
+                    while (flavourloop)
+                    {
+                        Console.Write("Select an ice cream order option\n---FLAVOUR LIST---\nBasic Flavours: Vanilla, Chocolate, Strawberry\nPremium Flavours(+$2 per scoop): Durian, Ube, Sea salt\nOption: ");
+                        type = Console.ReadLine().ToLower();
+                        if (type != "vanilla" && type != "chocolate" && type != "strawberry" && type != "durian" && type != "ube" && type != "sea salt")
+                        {
+                            Console.WriteLine("Please enter a valid flavour!");
+                            flavourloop = true;
+                        }
+                        else
+                        {
+                            break;
+
+                        }
+                    }
+                    // Flavour list
+                    if (type == "durian" || type == "ube" || type == "sea salt")
+                    {
+                        premium = true;
+                    }
+                    else
+                    {
+                        premium = false;
+                    }
+                    // Scoops
+
+                    bool scooploop = true;
+                    while (scooploop)
+                    {
+                        Console.Write($"Please enter quantity of scoops, enter 0 if you don't want any scoops. (Remaining scoops: {scoops})\nOption: ");
+                        int AmtScoops = Convert.ToInt32(Console.ReadLine());
+                        if (AmtScoops == 0)
+                        {
+                            Console.WriteLine($"No scoops taken, you have {scoops} scoops left");
+                            scooploop = false; // break out of scoop loop
+                        }
+                        else if (AmtScoops > scoops)
+                        {
+                            Console.WriteLine($"You only have {scoops} scoops! Please enter a valid amount!");
+                            scooploop = true;
+                        }
+                        else if (scoops >= AmtScoops)
+                        {
+                            scoops = scoops - AmtScoops;
+                            Console.WriteLine($"{AmtScoops} scoop(s) of {type} added.");
+                            Flavour flavour1 = new Flavour(type, premium, AmtScoops);
+                            flavours.Add(flavour1);
+                            scooploop = false;
+                        }
+
+                    }
+
+                }
+                // TOPPINGS
+                if (option == "cup")
+                {
+                    bool cuploop = true;
+                    while (cuploop)
+                    {
+                        Console.Write("Select topping(s), (Sprinkles, Mochi, Sago, Oreos) (Enter X when done, max 4 toppings)\nOption: ");
+                        string topping = Console.ReadLine().ToLower();
+                        if (topping != "sprinkles" && topping != "mochi" && topping != "sago" && topping != "oreos" && topping != "x")
+                        {
+                            Console.WriteLine("Please enter a valid option!");
+                            cuploop = true;
+                        }
+                        else if (topping == "x")
+                        {
+                            cuploop = false;
+                            IceCream iceCream = new Cup(option, scoops, flavours, toppings);
+                            newOrder.iceCreamList.Add(iceCream);
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{topping} added!");
+                            Topping topping1 = new Topping(topping);
+                            toppings.Add(topping1);
+                            IceCream iceCream = new Cup(option, scoops, flavours, toppings);
+                            newOrder.iceCreamList.Add(iceCream);
+                        }
+                    }
+
+                }
+                else if (option == "cone")
+                {
+                    bool coneloop = true;
+                    while (coneloop)
+                    {
+                        Console.Write("Select topping(s), (Sprinkles, Mochi, Sago, Oreos) (Enter X when done, max 4 toppings)\nOption: ");
+                        string topping = Console.ReadLine().ToLower();
+                        if (topping != "sprinkles" && topping != "mochi" && topping != "sago" && topping != "oreos" && topping != "x")
+                        {
+                            Console.WriteLine("Please enter a valid option!");
+                            coneloop = true;
+                        }
+                        else if (topping == "x")
+                        {
+                            coneloop = false;
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{topping} added!");
+                            Topping topping1 = new Topping(topping);
+                            toppings.Add(topping1);
+
+                        }
+                    }
+                    bool chococoneloop = true;
+
+                    while (chococoneloop)
+                    {
+                        Console.Write("Upgrade cone to chocolate-dipped cone for $2 more? (Y/N) ");
+                        string chococone = Console.ReadLine().ToLower();
+                        if (chococone == "y")
+                        {
+                            Console.WriteLine("Cone upgraded to chocolate-dipped cone!");
+                            IceCream iceCream = new Cone(option, scoops, flavours, toppings, true);
+                            newOrder.iceCreamList.Add(iceCream);
+                            chococoneloop = false;
+                        }
+                        else if (chococone == "n")
+                        {
+
+                            IceCream iceCream = new Cone(option, scoops, flavours, toppings, false);
+                            newOrder.iceCreamList.Add(iceCream);
+                            chococoneloop = false;
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter either Y or N");
+                            chococoneloop = true;
+                        }
+                    }
+
+                }
+
+                else if (option == "waffle")
+                {
+                    bool waffleloop = true;
+                    while (waffleloop)
+                    {
+                        Console.Write("Select topping(s), (Sprinkles, Mochi, Sago, Oreos) (Enter X when done, max 4 toppings)\nOption: ");
+                        string topping = Console.ReadLine().ToLower();
+                        if (topping != "sprinkles" && topping != "mochi" && topping != "sago" && topping != "oreos" && topping != "x")
+                        {
+                            Console.WriteLine("Please enter a valid option!");
+                            waffleloop = true;
+                        }
+                        else if (topping == "x")
+                        {
+                            waffleloop = false;
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{topping} added!");
+                            Topping topping1 = new Topping(topping);
+                            toppings.Add(topping1);
+                        }
+                    }
+                    bool waffleflavour = true;
+                    while (waffleflavour)
+                    {
+                        Console.Write("Change waffle flavour for additional $3? (Red velvet, charcoal, pandan\nOption(Original to exit): ");
+                        string FlavourChoice = Console.ReadLine().ToLower();
+                        if (FlavourChoice != "red velvet" && FlavourChoice != "charcoal" && FlavourChoice != "pandan" && FlavourChoice != "original")
+                        {
+                            Console.WriteLine("Please enter a valid waffle flavour choice!");
+                            waffleflavour = true;
+                        }
+                        else if (FlavourChoice == "original")
+                        {
+
+                            IceCream iceCream = new Waffle(option, scoops, flavours, toppings, FlavourChoice);
+                            newOrder.iceCreamList.Add(iceCream);
+                            waffleflavour = false;
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Waffle flavour has been changed to {FlavourChoice}!");
+                            Topping topping2 = new Topping(FlavourChoice);
+                            IceCream iceCream = new Waffle(option, scoops, flavours, toppings, FlavourChoice);
+
+                            newOrder.iceCreamList.Add(iceCream);
+                            waffleflavour = false;
+
+                        }
+                    }
+                }
+
+                Console.Write("Would you like to create another ice cream?");
+                addMoreIceCream = Console.ReadLine().ToLower() == "y";
+
+
+                foundCustomer.currentOrder = newOrder;
+                foundCustomer.orderHistory.Add(newOrder);
+                Console.WriteLine("Order has been successfully created!");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Please enter a valid input.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
-        catch (FormatException)
-        {
-            Console.WriteLine("Please enter a valid input.");
-        }
-        catch (Exception ex) { Console.WriteLine(ex.Message); }
 
     }
     else
@@ -264,7 +515,7 @@ static List<Customer> LoadCustomersFromFile(string filePath)
                 memberId: int.Parse(info[1]),
                 dob: DateTime.Parse(info[2])
             );
-            // Assuming PointCard constructor and relevant methods are defined
+
             PointCard rewards = new PointCard(int.Parse(info[4]), int.Parse(info[5]));
             customer.rewards = rewards;
             customers.Add(customer);
