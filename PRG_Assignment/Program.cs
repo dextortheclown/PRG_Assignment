@@ -5,8 +5,10 @@
 // ==========================================================
 
 // IT04 Dexter Wong Jun Han(Qn 2,5,6) and Chua Qi An(Qn 1,3,4)
+
 using PRG_Assignment;
-using ProgrammingAssgntest;
+
+
 // initialising all objects
 // Order Objects
 string[] order = File.ReadAllLines("orders.csv");
@@ -20,7 +22,7 @@ for (int i = 1; i < order.Length; i++)
 // Customer Objects
 string[] customer = File.ReadAllLines("customers.csv");
 List<Customer> customerList = new List<Customer>();
-for (int i = 1;i < customer.Length; i++)
+for (int i = 1; i < customer.Length; i++)
 {
     string[] cusinfo = customer[i].Split(",");
     customerList.Add(new Customer(cusinfo[0], int.Parse(cusinfo[1]), DateTime.Parse(cusinfo[2])));
@@ -40,7 +42,7 @@ foreach (Customer customers in customerList)
 }
 // Creating Gold Customer Queue 
 Queue<Order> GoldQueue = new Queue<Order>();
-Queue<Order> NormalQueue = new Queue<Order>();
+Queue<Order> RegularOrderQueue = new Queue<Order>();
 
 
 
@@ -101,7 +103,7 @@ void DisplayMenu()
 
 void Option1()
 {
-    
+
     string[] Heading = customer[0].Split(',');
     Console.WriteLine($"{Heading[0],-15}{Heading[1],-15}{Heading[2],-15}{Heading[3],-20}{Heading[4],-20}{Heading[5],-15}");
     for (int i = 1; i < customer.Length; i++)
@@ -141,7 +143,7 @@ void Option2()
     // normal queue
     Console.WriteLine("----Normal Queue----");
     Console.WriteLine($"{"Name",-10}{"Option",-8}{"Scoops",-8}{"Dipped",-8}{"Waffle Flavour",-15}{"Flavour1",-12}{"Flavour2",-12}{"Flavour3",-12}{"Topping1",-11}{"Topping2",-11}{"Topping3",-11}{"Topping4",-11}");
-    for (int i = 1;i < customer.Length; i++)
+    for (int i = 1; i < customer.Length; i++)
     {
         string[] cusinfo = customer[i].Split(",");
         for (int j = 1; j < order.Length; j++)
@@ -159,19 +161,29 @@ void Option2()
 // Basic Feature Question 3 ------------------ Register a new customer
 void Option3()
 {
-    Console.Write("Customers name: ");
-    string name = Console.ReadLine();
-    Console.Write("Customers ID number: ");
-    int memberId = Convert.ToInt32(Console.ReadLine());
-    Console.Write("Customers date of birth (dd-MM-yyyy): ");
-    DateTime dob = Convert.ToDateTime(Console.ReadLine());
-    Customer newCustomer = new Customer(name, memberId, dob);
-    PointCard newPointCard = new PointCard(0, 0);
-    newCustomer.rewards = newPointCard;
+    try
+    {
+        Console.Write("Customers name: ");
+        string name = Console.ReadLine();
+        Console.Write("Customers ID number: ");
+        int memberId = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Customers date of birth (dd-MM-yyyy): ");
+        DateTime dob = Convert.ToDateTime(Console.ReadLine());
+        Customer newCustomer = new Customer(name, memberId, dob);
+        PointCard newPointCard = new PointCard(0, 0);
+        newCustomer.rewards = newPointCard;
 
-    AppendCustomerToFile(newCustomer);
-    Console.WriteLine("Customer registration successful!");
-    Console.WriteLine();
+        AppendCustomerToFile(newCustomer);
+        Console.WriteLine("Customer registration successful!");
+        Console.WriteLine();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        Console.WriteLine(ex.StackTrace);
+    }
+
+
 }
 
 void AppendCustomerToFile(Customer customer) // To append customer into CSV file for option 3
@@ -447,7 +459,7 @@ void Option4()
                     bool waffleflavour = true;
                     while (waffleflavour)
                     {
-                        Console.Write("Change waffle flavour for additional $3? (Red velvet, charcoal, pandan\nOption(Original to exit): ");
+                        Console.Write("Change waffle flavour for additional $3? (Red velvet, charcoal, pandan\nOption (Original to exit): ");
                         string FlavourChoice = Console.ReadLine().ToLower();
                         if (FlavourChoice != "red velvet" && FlavourChoice != "charcoal" && FlavourChoice != "pandan" && FlavourChoice != "original")
                         {
@@ -475,13 +487,24 @@ void Option4()
                     }
                 }
 
-                Console.Write("Would you like to create another ice cream?");
+                Console.Write("Would you like to create another ice cream? (Y/N) ");
                 addMoreIceCream = Console.ReadLine().ToLower() == "y";
-
+                if (foundCustomer.rewards.tier == "Gold")
+                {
+                    GoldQueue.Enqueue(newOrder);
+                }
+                else
+                {
+                    RegularOrderQueue.Enqueue(newOrder);
+                }
+                // Linking the new order to the customer's current order
+                foundCustomer.currentOrder = newOrder;
+                Console.WriteLine("Order has been successfully created and added to the queue!");
 
                 foundCustomer.currentOrder = newOrder;
                 foundCustomer.orderHistory.Add(newOrder);
                 Console.WriteLine("Order has been successfully created!");
+
             }
             catch (FormatException)
             {
