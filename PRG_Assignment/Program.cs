@@ -41,8 +41,6 @@ for (int i = 1; i < customer.Length; i++)
         }
     }
 }*/
-}
-*/
 // Creating Gold Customer Queue 
 Queue<Order> GoldQueue = new Queue<Order>();
 Queue<Order> RegularOrderQueue = new Queue<Order>();
