@@ -24,7 +24,10 @@ namespace PRG_Assignment
 
         public override string ToString()
         {
-            return $"Option: {option} Scoops: {scoops} Flavours: {flavours} Toppings: {toppings}";
+            string flavourDescriptions = string.Join(", ", flavours.Select(f => f.ToString()));
+            string toppingDescriptions = string.Join(", ", toppings.Select(t => t.ToString()));
+            return $"Option: {option} | Scoops: {scoops} | Flavours: {flavourDescriptions} | Toppings: {toppingDescriptions}";
         }
+
     }
 }

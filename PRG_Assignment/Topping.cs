@@ -15,7 +15,7 @@ namespace PRG_Assignment
         }
         public override string ToString()
         {
-            return $"Type: {type}";
+            return $"Type: {type} | ";
         }
     }
 }

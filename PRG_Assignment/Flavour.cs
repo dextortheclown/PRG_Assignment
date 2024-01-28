@@ -19,7 +19,7 @@ namespace PRG_Assignment
         }
         public override string ToString()
         {
-            return $"Type: {type} Premium: {premium} Quantity: {quantity}";
+            return $"Type: {type} | Premium: {premium} | Quantity: {quantity}";
         }
     }
 }

@@ -14,12 +14,14 @@ namespace PRG_Assignment
         public List<IceCream> iceCreamList { get; set; }
         public Order()
         {
+            this.timeReceived = DateTime.Now;
             iceCreamList = new List<IceCream>();
         }
         public Order(int id, DateTime timeReceived)
         {
             this.id = id;
-            this.timeReceived = timeReceived;
+            this.timeReceived = DateTime.Now;
+            this.iceCreamList = new List<IceCream>();
         }
         public void ModifyIceCream(int id, IceCream NewiceCream)
         {

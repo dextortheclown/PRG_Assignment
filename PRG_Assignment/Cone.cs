@@ -51,5 +51,9 @@ namespace PRG_Assignment
             }
             return price;
         }
+        public override string ToString()
+        {
+            return base.ToString() + $"Dipped: {dipped}";
+        }
     }
 }

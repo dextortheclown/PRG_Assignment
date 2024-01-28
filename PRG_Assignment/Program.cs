@@ -29,7 +29,7 @@ for (int i = 1; i < customer.Length; i++)
 }
 
 // Adding Orders to History for each customer
-foreach (Customer customers in customerList)
+/* foreach (Customer customers in customerList)
 {
     for (int j = 1; j < order.Length; j++)
     {
@@ -39,7 +39,7 @@ foreach (Customer customers in customerList)
             customers.MakeOrder(new Order(ordinfo[]));
         }
     }
-}
+}*/
 // Creating Gold Customer Queue 
 Queue<Order> GoldQueue = new Queue<Order>();
 Queue<Order> RegularOrderQueue = new Queue<Order>();
@@ -95,7 +95,7 @@ while (true)
 }
 void DisplayMenu()
 {
-    Console.Write("------------- MENU --------------\r\n[1] List all customers\r\n[2] List all current orders\r\n[3] Register a new customer\r\n[4] Create a customer's order\r\n[5] Display order details of a customer\r\n[6] Modify order details\r\n[7] Process an order and checkout\r\n[8] Display monthly charged amounts breakdown & total charged amounts for the year\r\n[0] Exit\r\n---------------------------------\r\nEnter your option : ");
+    Console.Write("------------- MENU LIST --------------\r\n[1] List all customers\r\n[2] List all current orders\r\n[3] Register a new customer\r\n[4] Create a customer's order\r\n[5] Display order details of a customer\r\n[6] Modify order details\r\n[7] Process an order and checkout\r\n[8] Display monthly charged amounts breakdown & total charged amounts for the year\r\n[0] Exit\r\n--------------------------------------\r\nEnter your option : ");
 
 }
 
@@ -195,7 +195,7 @@ void AppendCustomerToFile(Customer customer) // To append customer into CSV file
 // Basic Feature Question 4 ------------------ Create a customer's order
 void Option4()
 {
-
+    int initialscoops = 0;
     //Printing of list of customers
 
     string[] Heading = customer[0].Split(',');
@@ -221,10 +221,10 @@ void Option4()
 
     // Prompt the user to select a customer by Member ID
     Console.Write("Select a customer by Member ID (E.G 685582): ");
-    string memberID = Console.ReadLine();
+    string memberId = Console.ReadLine();
 
     // Search for the customer with the specified Member ID
-    Customer foundCustomer = customers.Find(customer => customer.memberId.ToString() == memberID);
+    Customer foundCustomer = customers.Find(customer => customer.memberId.ToString() == memberId);
     if (foundCustomer != null)
     {
         bool addMoreIceCream = true;
@@ -233,7 +233,7 @@ void Option4()
             try
             {
                 bool premium;
-                Order newOrder = new Order();
+                Order newOrder = new Order(foundCustomer.memberId, DateTime.Now);
 
 
 
@@ -273,6 +273,7 @@ void Option4()
 
                     Console.Write("Please enter the number of scoops (1-3) : ");
                     scoops = Convert.ToInt32(Console.ReadLine());
+                    initialscoops = scoops;
                     if (scoops > 3)
                     {
                         Console.WriteLine("Please enter numbers between 1 to 3");
@@ -340,6 +341,7 @@ void Option4()
                             Console.WriteLine($"{AmtScoops} scoop(s) of {type} added.");
                             Flavour flavour1 = new Flavour(type, premium, AmtScoops);
                             flavours.Add(flavour1);
+ 
                             scooploop = false;
                         }
 
@@ -486,17 +488,60 @@ void Option4()
                         }
                     }
                 }
-
-                Console.Write("Would you like to create another ice cream? (Y/N) ");
-                addMoreIceCream = Console.ReadLine().ToLower() == "y";
+                // Assuming GoldQueue and RegularOrderQueue are of type Queue<Order>
                 if (foundCustomer.rewards.tier == "Gold")
                 {
-                    GoldQueue.Enqueue(newOrder);
+                    GoldQueue.Enqueue(newOrder); // Enqueue the entire Order object, not just the iceCreamList
                 }
                 else
                 {
-                    RegularOrderQueue.Enqueue(newOrder);
+                    RegularOrderQueue.Enqueue(newOrder); // Enqueue the entire Order object, not just the iceCreamList
                 }
+
+                Console.WriteLine("Regular queue contents: ");
+                foreach (Order order in RegularOrderQueue)
+                {
+                    Console.WriteLine($"Order ID: {order.id} | Time Received: {order.timeReceived}");
+                    foreach (IceCream iceCream in order.iceCreamList)
+                    {
+                        Console.Write($"Option: {iceCream.option} | Scoops: {iceCream.scoops} | Flavours: ");
+                        foreach (Flavour flavour in iceCream.flavours) 
+                        {
+                            Console.Write(flavour + "; ");
+                        }
+                        Console.Write("Toppings: ");
+                        foreach (Topping topping in iceCream.toppings) 
+                        {
+                            Console.Write(topping + "; ");
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine("-------------------------------------------------");
+                }
+
+                Console.WriteLine("Gold queue contents: ");
+                foreach (Order order in GoldQueue)
+                {
+                    Console.WriteLine($"Order ID: {order.id} | Time Received: {order.timeReceived}");
+                    foreach (IceCream iceCream in order.iceCreamList)
+                    {
+                        Console.Write($"Option: {iceCream.option} | Scoops: {iceCream.scoops} | Flavours: ");
+                        foreach (Flavour flavour in iceCream.flavours) 
+                        {
+                            Console.Write(flavour + "; ");
+                        }
+                        Console.Write("Toppings: ");
+                        foreach (Topping topping in iceCream.toppings) 
+                        {
+                            Console.Write(topping + "; ");
+                        }
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine("-------------------------------------------------");
+                }
+                Console.Write("Would you like to create another ice cream? (Y/N) ");
+                addMoreIceCream = Console.ReadLine().ToLower() == "y";
+
                 // Linking the new order to the customer's current order
                 foundCustomer.currentOrder = newOrder;
                 Console.WriteLine("Order has been successfully created and added to the queue!");

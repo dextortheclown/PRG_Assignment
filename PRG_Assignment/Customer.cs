@@ -49,7 +49,7 @@ namespace PRG_Assignment
                 orderHistoryString += order.ToString() + "\n";
             }
 
-            return $"Name: {name} | Member ID: {memberId} | Date of Birth: {dob.ToShortDateString()} | Order History: {orderHistoryString}";
+            return $"Name: {name} | Member ID: {memberId} | Date of Birth: {dob.ToShortDateString()} | Order History: {orderHistoryString} | ";
         }
     }
 }
