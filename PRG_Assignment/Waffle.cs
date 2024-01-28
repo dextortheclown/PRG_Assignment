@@ -5,7 +5,7 @@
 // ==========================================================
 using PRG_Assignment;
 
-namespace ProgrammingAssgntest
+namespace PRG_Assignment
 {
     internal class Waffle : IceCream
     {
