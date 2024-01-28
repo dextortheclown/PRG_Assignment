@@ -25,21 +25,6 @@ for (int i = 1;i < customer.Length; i++)
     customerList.Add(new Customer(cusinfo[0], int.Parse(cusinfo[1]), DateTime.Parse(cusinfo[2])));
 }
 
-// Adding Orders to History for each customer
-foreach (Customer customers in customerList)
-{
-    for (int j = 1; j < order.Length; j++)
-    {
-        string[] ordinfo = order[j].Split(",");
-        if (customers.memberId == int.Parse(ordinfo[1]))
-        {
-            customers.MakeOrder(new Order(ordinfo[]));
-        }
-    }
-}
-// Creating Gold Customer Queue 
-Queue<Order> GoldQueue = new Queue<Order>();
-
 
 
 // Display menu
@@ -274,6 +259,23 @@ static List<Customer> LoadCustomersFromFile(string filePath)
 }
 
 // Basic Feature Question 5 ------------------ Display order details of a customer
+
+// Adding Orders to History for each customer
+foreach (Customer customers in customerList)
+{
+    for (int j = 1; j < order.Length; j++)
+    {
+        string[] ordinfo = order[j].Split(",");
+        if (customers.memberId == int.Parse(ordinfo[1]))
+        {
+            Order orders = new Order(ordinfo[]);
+            customers.MakeOrder();
+        }
+    }
+}
+// Creating Gold Customer Queue 
+Queue<Order> GoldQueue = new Queue<Order>();
+
 void Option5()
 {
     // Displaying customers
