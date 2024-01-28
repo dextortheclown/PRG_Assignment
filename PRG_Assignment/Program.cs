@@ -28,6 +28,7 @@ for (int i = 1; i < customer.Length; i++)
     customerList.Add(new Customer(cusinfo[0], int.Parse(cusinfo[1]), DateTime.Parse(cusinfo[2])));
 }
 
+/*
 // Adding Orders to History for each customer
 foreach (Customer customers in customerList)
 {
@@ -40,6 +41,7 @@ foreach (Customer customers in customerList)
         }
     }
 }
+*/
 // Creating Gold Customer Queue 
 Queue<Order> GoldQueue = new Queue<Order>();
 Queue<Order> RegularOrderQueue = new Queue<Order>();
@@ -548,29 +550,36 @@ static List<Customer> LoadCustomersFromFile(string filePath)
 
 // Basic Feature Question 5 ------------------ Display order details of a customer
 
-// Adding Orders to History for each customer
-foreach (Customer customers in customerList)
+void Option5()
 {
-    for (int j = 1; j < order.Length; j++)
+    int OrdNumber = 1;
+    Option1();
+    Console.Write("Enter customer name: ");
+    string name = Console.ReadLine();
+    foreach (string line1 in customer)
     {
-        string[] ordinfo = order[j].Split(",");
-        if (customers.memberId == int.Parse(ordinfo[1]))
+        if (line1 != customer[0])
         {
-            Order orders = new Order(ordinfo[]);
-            customers.MakeOrder();
+            string[] cusinfo = line1.Split(',');
+            foreach (string line2 in order)
+            {
+                if (line2 != order[0])
+                {
+                    string[] ordinfo = line2.Split(",");
+                    if (cusinfo[0] == name)
+                    {
+                        if (cusinfo[1] == ordinfo[1])
+                        {
+                            Console.WriteLine($"Order: {OrdNumber}\nId: {ordinfo[0],-5}MemberId: {ordinfo[1],-10}\nTime Received: {ordinfo[2],-25}Time Fulfilled: {ordinfo[3],-15}\n" +
+                                $"{"Option",-8}{"Scoops",-8}{"Dipped",-8}{"Waffle Flav",-12}{"Flavour1",-12}{"Flavour2",-12}{"Flavour3",-12}{"Topping1",-11}{"Topping2",-11}{"Topping3",-11}{"Topping4",-11}");
+                            Console.WriteLine($"{ordinfo[4],-8}{ordinfo[5],-8}{ordinfo[6],-8}{ordinfo[7],-12}{ordinfo[8],-12}{ordinfo[9],-12}{ordinfo[10],-12}{ordinfo[11],-11}{ordinfo[12],-11}{ordinfo[13],-11}{ordinfo[14],-11}\n\n");
+                            OrdNumber++;
+                        }
+                    }
+                }
+            }
         }
     }
 }
-// Creating Gold Customer Queue 
-Queue<Order> GoldQueue = new Queue<Order>();
-
-void Option5()
-{
-    // Displaying customers
-    Option1();
-    Console.Write("Choose a Customer: ");
-    string? custoption = Console.ReadLine();
-}
-
 
 // Basic Feature Question 6 ------------------ Modify order details
