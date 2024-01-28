@@ -29,7 +29,7 @@ for (int i = 1; i < customer.Length; i++)
 }
 
 // Adding Orders to History for each customer
-/* foreach (Customer customers in customerList)
+/*foreach (Customer customers in customerList)
 {
     for (int j = 1; j < order.Length; j++)
     {
