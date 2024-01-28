@@ -186,10 +186,25 @@ void Option3()
 
 }
 
-void AppendCustomerToFile(Customer customer) // To append customer into CSV file for option 3
+void AppendCustomerToFile(Customer customer)
 {
+    // Construct the new customer data line
     string customerData = $"{customer.name},{customer.memberId},{customer.dob:dd-MM-yyyy},{customer.rewards.tier},{customer.rewards.points},{customer.rewards.punchCard}";
-    File.AppendAllText("customers.csv", customerData + Environment.NewLine);
+
+    // Exception handling
+    try
+    {
+        // Append the data to the file
+        using (StreamWriter sw = File.AppendText("customers.csv"))
+        {
+            sw.WriteLine(customerData);
+        }
+        Console.WriteLine("Customer registration successful!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error writing to file: {ex.Message}");
+    }
 }
 
 // Basic Feature Question 4 ------------------ Create a customer's order
@@ -351,6 +366,9 @@ void Option4()
                 // TOPPINGS
                 if (option == "cup")
                 {
+                    // Instantiate the Cup object outside of the toppings loop
+                    IceCream cupIceCream = new Cup(option, scoops, flavours, new List<Topping>());
+
                     bool cuploop = true;
                     while (cuploop)
                     {
@@ -359,26 +377,23 @@ void Option4()
                         if (topping != "sprinkles" && topping != "mochi" && topping != "sago" && topping != "oreos" && topping != "x")
                         {
                             Console.WriteLine("Please enter a valid option!");
-                            cuploop = true;
                         }
                         else if (topping == "x")
                         {
-                            cuploop = false;
-                            IceCream iceCream = new Cup(option, scoops, flavours, toppings);
-                            newOrder.iceCreamList.Add(iceCream);
-
+                            // Add the Cup object to the order list after all toppings are chosen
+                            newOrder.iceCreamList.Add(cupIceCream);
+                            cuploop = false; // Exit loop after adding the IceCream
                         }
                         else
                         {
                             Console.WriteLine($"{topping} added!");
                             Topping topping1 = new Topping(topping);
-                            toppings.Add(topping1);
-                            IceCream iceCream = new Cup(option, scoops, flavours, toppings);
-                            newOrder.iceCreamList.Add(iceCream);
+                            // Add toppings to the Cup object
+                            cupIceCream.toppings.Add(topping1);
                         }
                     }
-
                 }
+
                 else if (option == "cone")
                 {
                     bool coneloop = true;
@@ -497,54 +512,19 @@ void Option4()
                 {
                     RegularOrderQueue.Enqueue(newOrder); // Enqueue the entire Order object, not just the iceCreamList
                 }
-
+                // Printing queues !!!
                 Console.WriteLine("Regular queue contents: ");
-                foreach (Order order in RegularOrderQueue)
-                {
-                    Console.WriteLine($"Order ID: {order.id} | Time Received: {order.timeReceived}");
-                    foreach (IceCream iceCream in order.iceCreamList)
-                    {
-                        Console.Write($"Option: {iceCream.option} | Scoops: {iceCream.scoops} | Flavours: ");
-                        foreach (Flavour flavour in iceCream.flavours) 
-                        {
-                            Console.Write(flavour + "; ");
-                        }
-                        Console.Write("Toppings: ");
-                        foreach (Topping topping in iceCream.toppings) 
-                        {
-                            Console.Write(topping + "; ");
-                        }
-                        Console.WriteLine();
-                    }
-                    Console.WriteLine("-------------------------------------------------");
-                }
+                PrintQueueContents(RegularOrderQueue);
 
                 Console.WriteLine("Gold queue contents: ");
-                foreach (Order order in GoldQueue)
-                {
-                    Console.WriteLine($"Order ID: {order.id} | Time Received: {order.timeReceived}");
-                    foreach (IceCream iceCream in order.iceCreamList)
-                    {
-                        Console.Write($"Option: {iceCream.option} | Scoops: {iceCream.scoops} | Flavours: ");
-                        foreach (Flavour flavour in iceCream.flavours) 
-                        {
-                            Console.Write(flavour + "; ");
-                        }
-                        Console.Write("Toppings: ");
-                        foreach (Topping topping in iceCream.toppings) 
-                        {
-                            Console.Write(topping + "; ");
-                        }
-                        Console.WriteLine();
-                    }
-                    Console.WriteLine("-------------------------------------------------");
-                }
+                PrintQueueContents(GoldQueue);
+                // Adding another ice cream
                 Console.Write("Would you like to create another ice cream? (Y/N) ");
                 addMoreIceCream = Console.ReadLine().ToLower() == "y";
 
                 // Linking the new order to the customer's current order
                 foundCustomer.currentOrder = newOrder;
-                Console.WriteLine("Order has been successfully created and added to the queue!");
+                Console.WriteLine("Order has been successfully created and added to the queue!"); //  the q for the order being linked 
 
                 foundCustomer.currentOrder = newOrder;
                 foundCustomer.orderHistory.Add(newOrder);
@@ -591,7 +571,29 @@ static List<Customer> LoadCustomersFromFile(string filePath)
     }
     return customers;
 }
-
+// Printing Regular and Gold Queue
+void PrintQueueContents(Queue<Order> queue)
+{
+    foreach (Order order in queue)
+    {
+        Console.WriteLine($"Order ID: {order.id} | Time Received: {order.timeReceived}");
+        foreach (IceCream iceCream in order.iceCreamList)
+        {
+            Console.Write($"Option: {iceCream.option} | Flavours: ");
+            foreach (Flavour flavour in iceCream.flavours)
+            {
+                Console.Write($"Type: {flavour.type} | Premium: {flavour.premium} | Quantity: {flavour.quantity}; ");
+            }
+            Console.Write("Toppings: ");
+            foreach (Topping topping in iceCream.toppings)
+            {
+                Console.Write($"Type: {topping.type} | ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("-------------------------------------------------");
+    }
+}
 // Basic Feature Question 5 ------------------ Display order details of a customer
 
 void Option5()
